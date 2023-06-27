@@ -46,39 +46,8 @@ The project is powered by AFrame and Three.js. The effects and corresponding exa
 * Bad TV - https://github.com/felixturner/bad-tv-shader.
 
 The following shaders and passes were integrated into component and can be accessed when creating custom effects:
-* Copy Shader
-* Pencil Lines Material Shader
-* Halftone Shader
-* Film grain & scanlines shader
-* Vignette Shader
-* Gamma Correction Shader
-* Digital Glitch Shader
-* Luminosity Shader
-* Sobel Operator Shader
-* Luminosity High Pass Shader
-* Output Shader
-* RGB Shift Shader
-* Dot Screen Shader
-* VolumetericLightShader
-* Afterimage shader
-* BadTVShader
-* Static Shader
-
-* Pass  
-* Shader Pass
-* Mask Pass
-* Effect Composer
-* Render Pass
-* Pencil Lines Pass
-* Halftone Pass
-* Film Pass
-* Render Pixelated Pass
-* Glitch Pass
-* Unreal Bloom Pass
-* Output Pass
-* Clear Pass
-* Texture Pass
-* AfterImage Pass
+* Copy Shader, Pencil Lines Material Shader, Halftone Shader, Film grain & scanlines shader, Vignette Shader, Gamma Correction Shader, Digital Glitch Shader, Luminosity Shader, Sobel Operator Shader, Luminosity High Pass Shader, Output Shader, RGB Shift Shader, Dot Screen Shader, VolumetericLightShader, Afterimage shader, BadTVShader, Static Shader.
+* Pass, Shader Pass, Mask Pass, Effect Composer, Render Pass, Pencil Lines Pass, Halftone Pass, Film Pass, Render Pixelated Pass, Glitch Pass, Unreal Bloom Pass, Output Pass, Clear Pass, Texture Pass, AfterImage Pass.
         
 ### **Demo**
 See demo of the component here: [Demo](https://post-processing.glitch.me/)
