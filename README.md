@@ -6,9 +6,49 @@ This is the A-Frame component for post-processing effects, which are based on th
 
 
 ### **Instructions**
-In order to use the component attach "lenticular-image" to a-entity. The component has the following attributes: 
-* <b>img1: { type: "string", default: "" }</b> - URL to first image.
-* <b>img2: { type: "string", default: "" }</b> - URL to second image.
+In order to use the component attach "post-processing" to a-scene. The component has the following attributes: 
+* <b>effect: { type: "string", default: "sketchy-pencil" }</b> - It allows to set the effect type. One of the following effects could be set: sketchy-pencil, halftone, old-film, pixel, glitch, sobel, bloom, dot-screen, volumetric-light, afterimage, bad-tv 
+    
+* halftoneParams: { type: "string", default: "shape: 1, radius: 6, rotateR: Math.PI / 12, rotateB: (Math.PI / 12) * 2, rotateG: (Math.PI / 12) * 3, scatter: 1, blending: 1, blendingMode: 1, greyscale: false, disable: false" } - 
+    
+oldFilmParams: {
+      type: "string",
+      default: "grayscale: true, nIntensity: 0.3, sIntensity: 0.3, sCount: 256",
+    },
+    pixelParams: {
+      type: "string",
+      default:
+        "pixelSize: 12, normalEdgeStrength: 0.35, depthEdgeStrength: 0.4",
+    },
+    glitchParams: {
+      type: "string",
+      default: "goWild: false, enabled: true",
+    },
+    sobelParams: {
+      type: "string",
+      default: "enabled: true",
+    },
+    bloomParams: {
+      type: "string",
+      default: "threshold: 0, strength: 0.4, radius: 0, exposure: 1",
+    },
+    dotScreenParams: {
+      type: "string",
+      default: "scale: 4, angle: 90",
+    },
+    volumetricLightParams: {
+      type: "string",
+      default: "decay: 0.95, density: 0.5, exposure: 0.2, samples: 50",
+    },
+    afterimageParams: {
+      type: "string",
+      default: "damp: 0.8",
+    },
+    badTVParams: {
+      type: "string",
+      default:
+        "mute: true, show: true, distortion: 1.0, distortion2: 1.0, speed: 0.2, rollSpeed: 0",
+    },
 
 The code below shows the sample implementation of the component:
 ```
