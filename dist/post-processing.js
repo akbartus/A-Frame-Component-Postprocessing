@@ -3423,27 +3423,27 @@ AFRAME.registerComponent("post-processing", {
 
     this.bind();
   },
-  tick: function (t, dt) {
-    this.t = t;
-    this.dt = dt;
-  },
-  bind: function () {
-    const render = this.renderer.render;
-    const system = this;
-    let isDigest = false;
+  // tick: function (t, dt) {
+  //   this.t = t;
+  //   this.dt = dt;
+  // },
+  // bind: function () {
+  //   const render = this.renderer.render;
+  //   const system = this;
+  //   let isDigest = false;
 
-    this.renderer.render = function () {
-      if (isDigest) {
-        render.apply(this, arguments);
-      } else {
-        isDigest = true;
-        if (system.occlusionComposer) {
-          system.occlusionComposer.render(system.dt);
-        } else {
-          system.composer.render(system.dt);
-        }
-        isDigest = false;
-      }
-    };
+  //   this.renderer.render = function () {
+  //     if (isDigest) {
+  //       render.apply(this, arguments);
+  //     } else {
+  //       isDigest = true;
+  //       if (system.occlusionComposer) {
+  //         system.occlusionComposer.render(system.dt);
+  //       } else {
+  //         system.composer.render(system.dt);
+  //       }
+  //       isDigest = false;
+  //     }
+  //   };
   },
 });
