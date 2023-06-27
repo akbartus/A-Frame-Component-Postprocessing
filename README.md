@@ -34,12 +34,16 @@ The code below shows the sample implementation of the component:
 ```
 
 ### **Updates**
-Please note that the work on this component is still in progress. Future update will include:
+Please note that the work on this component is still in progress. Future updates will include:
 * Possibility of adding custom effects.
-* New effects.
+* New effects, created by Three.js community.
 
 ### **Tech Stack**
-The project is powered by AFrame and Three.js. The effects and corresponding examples were adapted from corresponding examples as provided in Three.js library as well as other sources (see: https://threejs.org/examples/?q=postprocessing, https://tympanus.net/codrops/2022/11/29/sketchy-pencil-effect-with-three-js-post-processing/, https://github.com/abberg/three-volumetric-light, https://github.com/felixturner/bad-tv-shader),  
+The project is powered by AFrame and Three.js. The effects and corresponding examples were adapted from Three.js library as well as other sources:
+* Halftone, Pixelation, Glitch, Sobel, Dot Screen, Old Film, Afterimage - https://threejs.org/examples/?q=postprocessing.
+* Sketchy Pencil - https://tympanus.net/codrops/2022/11/29/sketchy-pencil-effect-with-three-js-post-processing/.
+* Volumetric light (God-rays) - https://github.com/abberg/three-volumetric-light.
+* Bad TV - https://github.com/felixturner/bad-tv-shader.  
         
 ### **Demo**
 See demo of the component here: [Demo](https://post-processing.glitch.me/)
