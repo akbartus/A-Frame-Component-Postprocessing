@@ -3445,5 +3445,5 @@ AFRAME.registerComponent("post-processing", {
   //       isDigest = false;
   //     }
   //   };
-  },
+  // },
 });
