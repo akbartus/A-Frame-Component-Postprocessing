@@ -42,4 +42,4 @@ Please note that the work on this component is still in progress. Future update 
 The project is powered by AFrame and Three.js. The effects and corresponding examples were adapted from corresponding examples as provided in Three.js library as well as other sources (see: https://threejs.org/examples/?q=postprocessing, https://tympanus.net/codrops/2022/11/29/sketchy-pencil-effect-with-three-js-post-processing/, https://github.com/abberg/three-volumetric-light, https://github.com/felixturner/bad-tv-shader),  
         
 ### **Demo**
-See demo of the component here: [Demo](https://lenticular-image.glitch.me/)
+See demo of the component here: [Demo](https://post-processing.glitch.me/)
