@@ -1,6 +1,5 @@
 # A-Frame-Component-Postprocessing
-<img src="img/1.jpg" title="screen capture" alt="screen capture" height="150">
-<img src="img/2.jpg" title="screen capture" alt="screen capture" height="150">
+<img src="img/1.jpg" title="screen capture" alt="screen capture" height="150"><img src="img/2.jpg" title="screen capture" alt="screen capture" height="150">
 <img src="img/3.jpg" title="screen capture" alt="screen capture" height="150">
 <img src="img/4.jpg" title="screen capture" alt="screen capture" height="150">
 <img src="img/5.jpg" title="screen capture" alt="screen capture" height="150">
