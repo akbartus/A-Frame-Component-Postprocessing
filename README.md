@@ -73,7 +73,7 @@ The project is powered by AFrame and Three.js. The effects and corresponding exa
 * Volumetric light (God-rays) - https://github.com/abberg/three-volumetric-light.
 * Bad TV - https://github.com/felixturner/bad-tv-shader.
 
-Updated version of A-Frame (1.4.2) is used, which takes into account webXR. The updates to A-Frame and respective passes/shaders were made based on CodyJasonBennet's suggested changes to Three.js and taken from <a href="https://github.com/mrdoob/three.js/pull/26160">here</a> with indivudual changes made to <a href="https://github.com/CodyJasonBennett/three.js/commit/9719d00d36467508b4e36b8097908648e1f368b3">three.js</a> files. The VR mode was tested with Meta Quest 2 Headset. Tests using  other headsets are welcomed. 
+Updated version of A-Frame (1.4.2) is used, which takes into account webXR. The updates to A-Frame and respective passes/shaders were made based on CodyJasonBennett's suggested changes to Three.js and taken from <a href="https://github.com/mrdoob/three.js/pull/26160">here</a> with indivudual changes made to <a href="https://github.com/CodyJasonBennett/three.js/commit/9719d00d36467508b4e36b8097908648e1f368b3">three.js</a> files. The VR mode was tested with Meta Quest 2 Headset. Tests using  other headsets are welcomed. 
 
 A small hack allowing the support of Three.js based post-processing in A-Frame, was taken from the following <a href="https://stackoverflow.com/questions/68991451/is-there-a-way-to-implement-the-three-js-effect-composer-into-aframe-with-vr-mod">source</a>.  
 
