@@ -1,13 +1,14 @@
 # A-Frame-Component-Postprocessing
-<img src="img/1.jpg" title="screen capture" alt="screen capture" height="200"><img src="img/2.jpg" title="screen capture" alt="screen capture" height="200">
-<img src="img/3.jpg" title="screen capture" alt="screen capture" height="200">
-<img src="img/4.jpg" title="screen capture" alt="screen capture" height="200">
-<img src="img/5.jpg" title="screen capture" alt="screen capture" height="200">
-<img src="img/6.jpg" title="screen capture" alt="screen capture" height="200">
-<img src="img/7.jpg" title="screen capture" alt="screen capture" height="200">
-<img src="img/8.jpg" title="screen capture" alt="screen capture" height="200">
-<img src="img/9.jpg" title="screen capture" alt="screen capture" height="200">
-<img src="img/10.jpg" title="screen capture" alt="screen capture" height="200">
+<img src="img/1.jpg" title="screen capture" alt="screen capture" height="150">
+<img src="img/2.jpg" title="screen capture" alt="screen capture" height="150">
+<img src="img/3.jpg" title="screen capture" alt="screen capture" height="150">
+<img src="img/4.jpg" title="screen capture" alt="screen capture" height="150">
+<img src="img/5.jpg" title="screen capture" alt="screen capture" height="150">
+<img src="img/6.jpg" title="screen capture" alt="screen capture" height="150">
+<img src="img/7.jpg" title="screen capture" alt="screen capture" height="150">
+<img src="img/8.jpg" title="screen capture" alt="screen capture" height="150">
+<img src="img/9.jpg" title="screen capture" alt="screen capture" height="150">
+<img src="img/10.jpg" title="screen capture" alt="screen capture" height="150">
 
 ### **Description / Rationale**
 This is the A-Frame component for post-processing effects, which are based on the examples provided by Three.js and other sources (see Tech Stack section for more information). The component makes use of Effect Composer and lets compose effects in the same way as it is done in Three.js.
