@@ -9,9 +9,12 @@ This is the A-Frame component for post-processing effects, which are based on th
 In order to use the component attach "post-processing" to a-scene. The component has the following attributes: 
 * <b>effect: { type: "string", default: "sketchy-pencil" }</b> - It allows to set the effect type. One of the following effects could be set: sketchy-pencil, halftone, old-film, pixel, glitch, sobel, bloom, dot-screen, volumetric-light, afterimage, bad-tv. 
     
-* halftoneParams: { type: "string", default: "shape: 1, radius: 6, rotateR: Math.PI / 12, rotateB: (Math.PI / 12) * 2, rotateG: (Math.PI / 12) * 3, scatter: 1, blending: 1, blendingMode: 1, greyscale: false, disable: false" } - The parameters for halftone effect. Accepts the following in string format and written together: shape, radius, rotateR, rotateB, rotateG, scatter, blending, blendingMode, greyscale, disable.
+* <b>halftoneParams: {
+* type: "string",
+* default: "shape: 1, radius: 6, rotateR: Math.PI / 12, rotateB: (Math.PI / 12) * 2, rotateG: (Math.PI / 12) * 3, scatter: 1, blending: 1, blendingMode: 1, greyscale: false, disable: false"
+* }</b> - The parameters for halftone effect. Accepts the following in string format and written together: shape, radius, rotateR, rotateB, rotateG, scatter, blending, blendingMode, greyscale, disable.
     
-oldFilmParams: {
+* <b>oldFilmParams: {
       type: "string",
       default: "grayscale: true, nIntensity: 0.3, sIntensity: 0.3, sCount: 256",
     },
