@@ -14,18 +14,12 @@ In order to use the component attach "post-processing" to a-scene. The component
 * <b>oldFilmParams: { type: "string", default: "grayscale: true, nIntensity: 0.3, sIntensity: 0.3, sCount: 256" }</b> - The parameters of old film effect. Accepts the following in string format and is written togeter: grayscale, nIntensity, sIntensity, sCount.
 
 * <b>pixelParams: { type: "string", default: "pixelSize: 12, normalEdgeStrength: 0.35, depthEdgeStrength: 0.4" }*</b> - The parameters of pixel effect. Accepts the following: pixelSize, normalEdgeStrength, depthEdgeStrength.
-    glitchParams: {
-      type: "string",
-      default: "goWild: false, enabled: true",
-    },
-    sobelParams: {
-      type: "string",
-      default: "enabled: true",
-    },
-    bloomParams: {
-      type: "string",
-      default: "threshold: 0, strength: 0.4, radius: 0, exposure: 1",
-    },
+
+* <b>glitchParams: { type: "string", default: "goWild: false, enabled: true" }</b> - The parameters of glitch effect. Accepts the following: goWild, enabled. 
+
+* <b>sobelParams: { type: "string", default: "enabled: true" }</b> - The parameters of Sobel effect. Accepts only "enabled" parameter.
+
+* <b>bloomParams: { type: "string", default: "threshold: 0, strength: 0.4, radius: 0, exposure: 1" }</b> - The parameters of bloom effect. Accepts the following: threshold, strength, radius and exposure.
     dotScreenParams: {
       type: "string",
       default: "scale: 4, angle: 90",
