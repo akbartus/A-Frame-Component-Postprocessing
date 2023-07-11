@@ -20,23 +20,16 @@ In order to use the component attach "post-processing" to a-scene. The component
 * <b>sobelParams: { type: "string", default: "enabled: true" }</b> - The parameters of Sobel effect. Accepts only "enabled" parameter.
 
 * <b>bloomParams: { type: "string", default: "threshold: 0, strength: 0.4, radius: 0, exposure: 1" }</b> - The parameters of bloom effect. Accepts the following: threshold, strength, radius and exposure.
-    dotScreenParams: {
-      type: "string",
-      default: "scale: 4, angle: 90",
-    },
-    volumetricLightParams: {
-      type: "string",
-      default: "decay: 0.95, density: 0.5, exposure: 0.2, samples: 50",
-    },
-    afterimageParams: {
-      type: "string",
-      default: "damp: 0.8",
-    },
-    badTVParams: {
-      type: "string",
-      default:
-        "mute: true, show: true, distortion: 1.0, distortion2: 1.0, speed: 0.2, rollSpeed: 0",
-    },
+
+* <b>dotScreenParams: { type: "string", default: "scale: 4, angle: 90" }</b> - The parameters of dotscreen effect. Accepts the following: scale and angle. 
+
+* <b>volumetricLightParams: { type: "string", default: "decay: 0.95, density: 0.5, exposure: 0.2, samples: 50" }</b> - The parameters of volumetric light effect. Accepts the following: decay, density, exposure, samples.
+
+* <b>afterimageParams: { type: "string", default: "damp: 0.8" } </b> - The parameters of afterimage effect. Accepts only damp parameter. 
+
+* <b>badTVParams: { type: "string", default: "mute: true, show: true, distortion: 1.0, distortion2: 1.0, speed: 0.2, rollSpeed: 0" }*</b> - The parameters of bad TV effect. Accepts the following: mute, show, distortion, distortion2, speed, rollSpeed.
+
+<b>* Please note:</b> The individual effects of pixel and badTV do not work properly in VR mode yet.  
 
 The code below shows the sample implementation of the component:
 ```
