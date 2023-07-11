@@ -77,7 +77,7 @@ Updated version of A-Frame (1.4.2) is used, which takes into account webXR. The 
 
 A small hack allowing the support of Three.js based post-processing in A-Frame, was taken from the following <a href="https://stackoverflow.com/questions/68991451/is-there-a-way-to-implement-the-three-js-effect-composer-into-aframe-with-vr-mod">source</a>.  
 
-The following shaders and passes were integrated into component and can be accessed when creating custom effects:
+The following shaders and passes were integrated into component and can be accessed when creating custom effects (separate attribute with custom-effect will be added in next release):
 * Copy Shader, Pencil Lines Material Shader, Halftone Shader, Film grain & scanlines shader, Vignette Shader, Gamma Correction Shader, Digital Glitch Shader, Luminosity Shader, Sobel Operator Shader, Luminosity High Pass Shader, Output Shader, RGB Shift Shader, Dot Screen Shader, VolumetericLightShader, Afterimage shader, BadTVShader, Static Shader.
 * Pass, Shader Pass, Mask Pass, Effect Composer, Render Pass, Pencil Lines Pass, Halftone Pass, Film Pass, Render Pixelated Pass, Glitch Pass, Unreal Bloom Pass, Output Pass, Clear Pass, Texture Pass, AfterImage Pass.
         
