@@ -1,40 +1,48 @@
 //////////////////////////////
 // Copy Shader			        //
 //////////////////////////////
+/**
+ * Full-screen textured quad shader
+ */
+
 const CopyShader = {
-  name: "CopyShader",
 
-  uniforms: {
-    tDiffuse: { value: null },
-    opacity: { value: 1.0 },
-  },
+	name: 'CopyShader',
 
-  vertexShader: /* glsl */ `
-  
-          varying vec2 vUv;
-  
-          void main() {
-  
-              vUv = uv;
-              gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
-  
-          }`,
+	uniforms: {
 
-  fragmentShader: /* glsl */ `
-  
-          uniform float opacity;
-  
-          uniform sampler2D tDiffuse;
-  
-          varying vec2 vUv;
-  
-          void main() {
-  
-              gl_FragColor = texture2D( tDiffuse, vUv );
-              gl_FragColor.a *= opacity;
-  
-  
-          }`,
+		'tDiffuse': { value: null },
+		'opacity': { value: 1.0 }
+
+	},
+
+	vertexShader: /* glsl */`
+
+		varying vec2 vUv;
+
+		void main() {
+
+			vUv = uv;
+			gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+
+		}`,
+
+	fragmentShader: /* glsl */`
+
+		uniform float opacity;
+
+		uniform sampler2D tDiffuse;
+
+		varying vec2 vUv;
+
+		void main() {
+
+			gl_FragColor = texture2D( tDiffuse, vUv );
+			gl_FragColor.a *= opacity;
+
+
+		}`
+
 };
 
 //////////////////////////////
@@ -46,70 +54,85 @@ const OrthographicCamera = THREE.OrthographicCamera;
 const Mesh = THREE.Mesh;
 
 class Pass {
-  constructor() {
-    this.isPass = true;
 
-    // if set to true, the pass is processed by the composer
-    this.enabled = true;
+	constructor() {
 
-    // if set to true, the pass indicates to swap read and write buffer after rendering
-    this.needsSwap = true;
+		this.isPass = true;
 
-    // if set to true, the pass clears its buffer before rendering
-    this.clear = false;
+		// if set to true, the pass is processed by the composer
+		this.enabled = true;
 
-    // if set to true, the result of the pass is rendered to screen. This is set automatically by EffectComposer.
-    this.renderToScreen = false;
-  }
+		// if set to true, the pass indicates to swap read and write buffer after rendering
+		this.needsSwap = true;
 
-  setSize(/* width, height */) {}
+		// if set to true, the pass clears its buffer before rendering
+		this.clear = false;
 
-  render(/* renderer, writeBuffer, readBuffer, deltaTime, maskActive */) {
-    console.error("THREE.Pass: .render() must be implemented in derived pass.");
-  }
+		// if set to true, the result of the pass is rendered to screen. This is set automatically by EffectComposer.
+		this.renderToScreen = false;
 
-  dispose() {}
+	}
+
+	setSize( /* width, height */ ) {}
+
+	render( /* renderer, writeBuffer, readBuffer, deltaTime, maskActive */ ) {
+
+		console.error( 'THREE.Pass: .render() must be implemented in derived pass.' );
+
+	}
+
+	dispose() {}
+
 }
 
 // Helper for passes that need to fill the viewport with a single quad.
 
-const _camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
+const _camera = new OrthographicCamera( - 1, 1, 1, - 1, 0, 1 );
 
 // https://github.com/mrdoob/three.js/pull/21358
 
 const _geometry = new BufferGeometry();
-_geometry.setAttribute(
-  "position",
-  new Float32BufferAttribute([-1, 3, 0, -1, -1, 0, 3, -1, 0], 3)
-);
-_geometry.setAttribute("uv", new Float32BufferAttribute([0, 2, 0, 0, 2, 0], 2));
+_geometry.setAttribute( 'position', new Float32BufferAttribute( [ - 1, 3, 0, - 1, - 1, 0, 3, - 1, 0 ], 3 ) );
+_geometry.setAttribute( 'uv', new Float32BufferAttribute( [ 0, 2, 0, 0, 2, 0 ], 2 ) );
 
 class FullScreenQuad {
-  constructor(material) {
-    this._mesh = new Mesh(_geometry, material);
-  }
 
-  dispose() {
-    this._mesh.geometry.dispose();
-  }
+	constructor( material ) {
 
-  render(renderer) {
-    // Disable XR projection for fullscreen effects
-    // https://github.com/mrdoob/three.js/pull/18846
-    const xrEnabled = renderer.xr.enabled;
+		this._mesh = new Mesh( _geometry, material );
 
-    renderer.xr.enabled = false;
-    renderer.render(this._mesh, _camera);
-    renderer.xr.enabled = xrEnabled;
-  }
+	}
 
-  get material() {
-    return this._mesh.material;
-  }
+	dispose() {
 
-  set material(value) {
-    this._mesh.material = value;
-  }
+		this._mesh.geometry.dispose();
+
+	}
+
+	render( renderer ) {
+
+		// Disable XR projection for fullscreen effects
+		// https://github.com/mrdoob/three.js/pull/18846
+		const xrEnabled = renderer.xr.enabled;
+
+		renderer.xr.enabled = false;
+		renderer.render( this._mesh, _camera );
+		renderer.xr.enabled = xrEnabled;
+
+	}
+
+	get material() {
+
+		return this._mesh.material;
+
+	}
+
+	set material( value ) {
+
+		this._mesh.material = value;
+
+	}
+
 }
 
 //////////////////////////////
@@ -119,148 +142,176 @@ const ShaderMaterial = THREE.ShaderMaterial;
 const UniformsUtils = THREE.UniformsUtils;
 
 class ShaderPass extends Pass {
-  constructor(shader, textureID) {
-    super();
 
-    this.textureID = textureID !== undefined ? textureID : "tDiffuse";
+	constructor( shader, textureID ) {
 
-    if (shader instanceof ShaderMaterial) {
-      this.uniforms = shader.uniforms;
+		super();
 
-      this.material = shader;
-    } else if (shader) {
-      this.uniforms = UniformsUtils.clone(shader.uniforms);
+		this.textureID = ( textureID !== undefined ) ? textureID : 'tDiffuse';
 
-      this.material = new ShaderMaterial({
-        name: shader.name !== undefined ? shader.name : "unspecified",
-        defines: Object.assign({}, shader.defines),
-        uniforms: this.uniforms,
-        vertexShader: shader.vertexShader,
-        fragmentShader: shader.fragmentShader,
-      });
-    }
+		if ( shader instanceof ShaderMaterial ) {
 
-    this.fsQuad = new FullScreenQuad(this.material);
-  }
+			this.uniforms = shader.uniforms;
 
-  render(renderer, writeBuffer, readBuffer /*, deltaTime, maskActive */) {
-    if (this.uniforms[this.textureID]) {
-      this.uniforms[this.textureID].value = readBuffer.texture;
-    }
+			this.material = shader;
 
-    this.fsQuad.material = this.material;
+		} else if ( shader ) {
 
-    if (this.renderToScreen) {
-      renderer.setRenderTarget(null);
-      this.fsQuad.render(renderer);
-    } else {
-      renderer.setRenderTarget(writeBuffer);
-      // TODO: Avoid using autoClear properties, see https://github.com/mrdoob/three.js/pull/15571#issuecomment-465669600
-      if (this.clear)
-        renderer.clear(
-          renderer.autoClearColor,
-          renderer.autoClearDepth,
-          renderer.autoClearStencil
-        );
-      this.fsQuad.render(renderer);
-    }
-  }
+			this.uniforms = UniformsUtils.clone( shader.uniforms );
 
-  dispose() {
-    this.material.dispose();
+			this.material = new ShaderMaterial( {
 
-    this.fsQuad.dispose();
-  }
+				name: ( shader.name !== undefined ) ? shader.name : 'unspecified',
+				defines: Object.assign( {}, shader.defines ),
+				uniforms: this.uniforms,
+				vertexShader: shader.vertexShader,
+				fragmentShader: shader.fragmentShader
+
+			} );
+
+		}
+
+		this.fsQuad = new FullScreenQuad( this.material );
+
+	}
+
+	render( renderer, writeBuffer, readBuffer /*, deltaTime, maskActive */ ) {
+
+		if ( this.uniforms[ this.textureID ] ) {
+
+			this.uniforms[ this.textureID ].value = readBuffer.texture;
+
+		}
+
+		this.fsQuad.material = this.material;
+
+		if ( this.renderToScreen ) {
+
+			renderer.setRenderTarget( null );
+			this.fsQuad.render( renderer );
+
+		} else {
+
+			renderer.setRenderTarget( writeBuffer );
+			// TODO: Avoid using autoClear properties, see https://github.com/mrdoob/three.js/pull/15571#issuecomment-465669600
+			if ( this.clear ) renderer.clear( renderer.autoClearColor, renderer.autoClearDepth, renderer.autoClearStencil );
+			this.fsQuad.render( renderer );
+
+		}
+
+	}
+
+	dispose() {
+
+		this.material.dispose();
+
+		this.fsQuad.dispose();
+
+	}
+
 }
 
 //////////////////////////////
 // Mask Pass  			        //
 //////////////////////////////
 class MaskPass extends Pass {
-  constructor(scene, camera) {
-    super();
 
-    this.scene = scene;
-    this.camera = camera;
+	constructor( scene, camera ) {
 
-    this.clear = true;
-    this.needsSwap = false;
+		super();
 
-    this.inverse = false;
-  }
+		this.scene = scene;
+		this.camera = camera;
 
-  render(renderer, writeBuffer, readBuffer /*, deltaTime, maskActive */) {
-    const context = renderer.getContext();
-    const state = renderer.state;
+		this.clear = true;
+		this.needsSwap = false;
 
-    // don't update color or depth
+		this.inverse = false;
 
-    state.buffers.color.setMask(false);
-    state.buffers.depth.setMask(false);
+	}
 
-    // lock buffers
+	render( renderer, writeBuffer, readBuffer /*, deltaTime, maskActive */ ) {
 
-    state.buffers.color.setLocked(true);
-    state.buffers.depth.setLocked(true);
+		const context = renderer.getContext();
+		const state = renderer.state;
 
-    // set up stencil
+		// don't update color or depth
 
-    let writeValue, clearValue;
+		state.buffers.color.setMask( false );
+		state.buffers.depth.setMask( false );
 
-    if (this.inverse) {
-      writeValue = 0;
-      clearValue = 1;
-    } else {
-      writeValue = 1;
-      clearValue = 0;
-    }
+		// lock buffers
 
-    state.buffers.stencil.setTest(true);
-    state.buffers.stencil.setOp(
-      context.REPLACE,
-      context.REPLACE,
-      context.REPLACE
-    );
-    state.buffers.stencil.setFunc(context.ALWAYS, writeValue, 0xffffffff);
-    state.buffers.stencil.setClear(clearValue);
-    state.buffers.stencil.setLocked(true);
+		state.buffers.color.setLocked( true );
+		state.buffers.depth.setLocked( true );
 
-    // draw into the stencil buffer
+		// set up stencil
 
-    renderer.setRenderTarget(readBuffer);
-    if (this.clear) renderer.clear();
-    renderer.render(this.scene, this.camera);
+		let writeValue, clearValue;
 
-    renderer.setRenderTarget(writeBuffer);
-    if (this.clear) renderer.clear();
-    renderer.render(this.scene, this.camera);
+		if ( this.inverse ) {
 
-    // unlock color and depth buffer for subsequent rendering
+			writeValue = 0;
+			clearValue = 1;
 
-    state.buffers.color.setLocked(false);
-    state.buffers.depth.setLocked(false);
+		} else {
 
-    // only render where stencil is set to 1
+			writeValue = 1;
+			clearValue = 0;
 
-    state.buffers.stencil.setLocked(false);
-    state.buffers.stencil.setFunc(context.EQUAL, 1, 0xffffffff); // draw if == 1
-    state.buffers.stencil.setOp(context.KEEP, context.KEEP, context.KEEP);
-    state.buffers.stencil.setLocked(true);
-  }
+		}
+
+		state.buffers.stencil.setTest( true );
+		state.buffers.stencil.setOp( context.REPLACE, context.REPLACE, context.REPLACE );
+		state.buffers.stencil.setFunc( context.ALWAYS, writeValue, 0xffffffff );
+		state.buffers.stencil.setClear( clearValue );
+		state.buffers.stencil.setLocked( true );
+
+		// draw into the stencil buffer
+
+		renderer.setRenderTarget( readBuffer );
+		if ( this.clear ) renderer.clear();
+		renderer.render( this.scene, this.camera );
+
+		renderer.setRenderTarget( writeBuffer );
+		if ( this.clear ) renderer.clear();
+		renderer.render( this.scene, this.camera );
+
+		// unlock color and depth buffer for subsequent rendering
+
+		state.buffers.color.setLocked( false );
+		state.buffers.depth.setLocked( false );
+
+		// only render where stencil is set to 1
+
+		state.buffers.stencil.setLocked( false );
+		state.buffers.stencil.setFunc( context.EQUAL, 1, 0xffffffff ); // draw if == 1
+		state.buffers.stencil.setOp( context.KEEP, context.KEEP, context.KEEP );
+		state.buffers.stencil.setLocked( true );
+
+	}
+
 }
 
 class ClearMaskPass extends Pass {
-  constructor() {
-    super();
 
-    this.needsSwap = false;
-  }
+	constructor() {
 
-  render(renderer /*, writeBuffer, readBuffer, deltaTime, maskActive */) {
-    renderer.state.buffers.stencil.setLocked(false);
-    renderer.state.buffers.stencil.setTest(false);
-  }
+		super();
+
+		this.needsSwap = false;
+
+	}
+
+	render( renderer /*, writeBuffer, readBuffer, deltaTime, maskActive */ ) {
+
+		renderer.state.buffers.stencil.setLocked( false );
+		renderer.state.buffers.stencil.setTest( false );
+
+	}
+
 }
+
 
 //////////////////////////////
 // Effect Composer          //
@@ -271,289 +322,319 @@ const Vector2 = THREE.Vector2;
 const WebGLRenderTarget = THREE.WebGLRenderTarget;
 
 const size = /* @__PURE__ */ new Vector2();
+
 class EffectComposer {
-  constructor(renderer, renderTarget) {
-    this.renderer = renderer;
 
-    this._pixelRatio = renderer.getPixelRatio();
+	constructor( renderer, renderTarget ) {
 
-    if (renderTarget === undefined) {
-      renderer.getSize(size);
-      this._width = size.width;
-      this._height = size.height;
+		this.renderer = renderer;
 
-      renderTarget = new WebGLRenderTarget(
-        this._width * this._pixelRatio,
-        this._height * this._pixelRatio,
-        { type: HalfFloatType }
-      );
-      renderTarget.texture.name = "EffectComposer.rt1";
-    } else {
-      this._width = renderTarget.width;
-      this._height = renderTarget.height;
-    }
+		this._pixelRatio = renderer.getPixelRatio();
 
-    this.renderTarget1 = renderTarget;
-    this.renderTarget2 = renderTarget.clone();
-    this.renderTarget2.texture.name = "EffectComposer.rt2";
+		if ( renderTarget === undefined ) {
 
-    this.writeBuffer = this.renderTarget1;
-    this.readBuffer = this.renderTarget2;
+			renderer.getSize( size );
+			this._width = size.width;
+			this._height = size.height;
 
-    this.renderToScreen = true;
+			renderTarget = new WebGLRenderTarget( this._width * this._pixelRatio, this._height * this._pixelRatio, { type: HalfFloatType } );
+			renderTarget.texture.name = 'EffectComposer.rt1';
 
-    this.passes = [];
+		} else {
 
-    this.copyPass = new ShaderPass(CopyShader);
+			this._width = renderTarget.width;
+			this._height = renderTarget.height;
 
-    this.clock = new Clock();
+		}
 
-    this.onSessionStateChange = this.onSessionStateChange.bind(this);
-    this.renderer.xr.addEventListener(
-      "sessionstart",
-      this.onSessionStateChange
-    );
-    this.renderer.xr.addEventListener("sessionend", this.onSessionStateChange);
-  }
+		this.renderTarget1 = renderTarget;
+		this.renderTarget2 = renderTarget.clone();
+		this.renderTarget2.texture.name = 'EffectComposer.rt2';
 
-  onSessionStateChange() {
-    this.renderer.getSize(size);
-    this._width = size.width;
-    this._height = size.height;
+		this.writeBuffer = this.renderTarget1;
+		this.readBuffer = this.renderTarget2;
 
-    this._pixelRatio = this.renderer.xr.isPresenting
-      ? 1
-      : this.renderer.getPixelRatio();
+		this.renderToScreen = true;
 
-    this.setSize(this._width, this._height);
-  }
+		this.passes = [];
 
-  swapBuffers() {
-    const tmp = this.readBuffer;
-    this.readBuffer = this.writeBuffer;
-    this.writeBuffer = tmp;
-  }
+		this.copyPass = new ShaderPass( CopyShader );
 
-  addPass(pass) {
-    this.passes.push(pass);
-    pass.setSize(
-      this._width * this._pixelRatio,
-      this._height * this._pixelRatio
-    );
-  }
+		this.clock = new Clock();
 
-  insertPass(pass, index) {
-    this.passes.splice(index, 0, pass);
-    pass.setSize(
-      this._width * this._pixelRatio,
-      this._height * this._pixelRatio
-    );
-  }
+		this.onSessionStateChange = this.onSessionStateChange.bind( this );
+		this.renderer.xr.addEventListener( 'sessionstart', this.onSessionStateChange );
+		this.renderer.xr.addEventListener( 'sessionend', this.onSessionStateChange );
 
-  removePass(pass) {
-    const index = this.passes.indexOf(pass);
+	}
 
-    if (index !== -1) {
-      this.passes.splice(index, 1);
-    }
-  }
+	onSessionStateChange() {
 
-  isLastEnabledPass(passIndex) {
-    for (let i = passIndex + 1; i < this.passes.length; i++) {
-      if (this.passes[i].enabled) {
-        return false;
-      }
-    }
+		this.renderer.getSize( size );
+		this._width = size.width;
+		this._height = size.height;
 
-    return true;
-  }
+		this._pixelRatio = this.renderer.xr.isPresenting ? 1 : this.renderer.getPixelRatio();
 
-  render(deltaTime) {
-    // deltaTime value is in seconds
+		this.setSize( this._width, this._height );
 
-    if (deltaTime === undefined) {
-      deltaTime = this.clock.getDelta();
-    }
+	}
 
-    const currentRenderTarget = this.renderer.getRenderTarget();
+	swapBuffers() {
 
-    let maskActive = false;
+		const tmp = this.readBuffer;
+		this.readBuffer = this.writeBuffer;
+		this.writeBuffer = tmp;
 
-    for (let i = 0, il = this.passes.length; i < il; i++) {
-      const pass = this.passes[i];
+	}
 
-      if (pass.enabled === false) continue;
+	addPass( pass ) {
 
-      pass.renderToScreen = this.renderToScreen && this.isLastEnabledPass(i);
-      pass.render(
-        this.renderer,
-        this.writeBuffer,
-        this.readBuffer,
-        deltaTime,
-        maskActive
-      );
+		this.passes.push( pass );
+		pass.setSize( this._width * this._pixelRatio, this._height * this._pixelRatio );
 
-      if (pass.needsSwap) {
-        if (maskActive) {
-          const context = this.renderer.getContext();
-          const stencil = this.renderer.state.buffers.stencil;
+	}
 
-          //context.stencilFunc( context.NOTEQUAL, 1, 0xffffffff );
-          stencil.setFunc(context.NOTEQUAL, 1, 0xffffffff);
+	insertPass( pass, index ) {
 
-          this.copyPass.render(
-            this.renderer,
-            this.writeBuffer,
-            this.readBuffer,
-            deltaTime
-          );
+		this.passes.splice( index, 0, pass );
+		pass.setSize( this._width * this._pixelRatio, this._height * this._pixelRatio );
 
-          //context.stencilFunc( context.EQUAL, 1, 0xffffffff );
-          stencil.setFunc(context.EQUAL, 1, 0xffffffff);
-        }
+	}
 
-        this.swapBuffers();
-      }
+	removePass( pass ) {
 
-      if (MaskPass !== undefined) {
-        if (pass instanceof MaskPass) {
-          maskActive = true;
-        } else if (pass instanceof ClearMaskPass) {
-          maskActive = false;
-        }
-      }
-    }
+		const index = this.passes.indexOf( pass );
 
-    this.renderer.setRenderTarget(currentRenderTarget);
-  }
+		if ( index !== - 1 ) {
 
-  reset(renderTarget) {
-    if (renderTarget === undefined) {
-      this.renderer.getSize(size);
-      this._pixelRatio = this.renderer.getPixelRatio();
-      this._width = size.width;
-      this._height = size.height;
+			this.passes.splice( index, 1 );
 
-      renderTarget = this.renderTarget1.clone();
-      renderTarget.setSize(
-        this._width * this._pixelRatio,
-        this._height * this._pixelRatio
-      );
-    }
+		}
 
-    this.renderTarget1.dispose();
-    this.renderTarget2.dispose();
-    this.renderTarget1 = renderTarget;
-    this.renderTarget2 = renderTarget.clone();
+	}
 
-    this.writeBuffer = this.renderTarget1;
-    this.readBuffer = this.renderTarget2;
-  }
+	isLastEnabledPass( passIndex ) {
 
-  setSize(width, height) {
-    this._width = width;
-    this._height = height;
+		for ( let i = passIndex + 1; i < this.passes.length; i ++ ) {
 
-    const effectiveWidth = this._width * this._pixelRatio;
-    const effectiveHeight = this._height * this._pixelRatio;
+			if ( this.passes[ i ].enabled ) {
 
-    this.renderTarget1.setSize(effectiveWidth, effectiveHeight);
-    this.renderTarget2.setSize(effectiveWidth, effectiveHeight);
+				return false;
 
-    for (let i = 0; i < this.passes.length; i++) {
-      this.passes[i].setSize(effectiveWidth, effectiveHeight);
-    }
-  }
+			}
 
-  setPixelRatio(pixelRatio) {
-    this._pixelRatio = pixelRatio;
+		}
 
-    this.setSize(this._width, this._height);
-  }
+		return true;
 
-  dispose() {
-    this.renderTarget1.dispose();
-    this.renderTarget2.dispose();
+	}
 
-    this.copyPass.dispose();
+	render( deltaTime ) {
 
-    this.renderer.xr.removeEventListener(
-      "sessionstart",
-      this.onSessionStateChange
-    );
-    this.renderer.xr.removeEventListener(
-      "sessionend",
-      this.onSessionStateChange
-    );
-  }
+		// deltaTime value is in seconds
+
+		if ( deltaTime === undefined ) {
+
+			deltaTime = this.clock.getDelta();
+
+		}
+
+		const currentRenderTarget = this.renderer.getRenderTarget();
+
+		let maskActive = false;
+
+		for ( let i = 0, il = this.passes.length; i < il; i ++ ) {
+
+			const pass = this.passes[ i ];
+
+			if ( pass.enabled === false ) continue;
+
+			pass.renderToScreen = ( this.renderToScreen && this.isLastEnabledPass( i ) );
+			pass.render( this.renderer, this.writeBuffer, this.readBuffer, deltaTime, maskActive );
+
+			if ( pass.needsSwap ) {
+
+				if ( maskActive ) {
+
+					const context = this.renderer.getContext();
+					const stencil = this.renderer.state.buffers.stencil;
+
+					//context.stencilFunc( context.NOTEQUAL, 1, 0xffffffff );
+					stencil.setFunc( context.NOTEQUAL, 1, 0xffffffff );
+
+					this.copyPass.render( this.renderer, this.writeBuffer, this.readBuffer, deltaTime );
+
+					//context.stencilFunc( context.EQUAL, 1, 0xffffffff );
+					stencil.setFunc( context.EQUAL, 1, 0xffffffff );
+
+				}
+
+				this.swapBuffers();
+
+			}
+
+			if ( MaskPass !== undefined ) {
+
+				if ( pass instanceof MaskPass ) {
+
+					maskActive = true;
+
+				} else if ( pass instanceof ClearMaskPass ) {
+
+					maskActive = false;
+
+				}
+
+			}
+
+		}
+
+		this.renderer.setRenderTarget( currentRenderTarget );
+
+	}
+
+	reset( renderTarget ) {
+
+		if ( renderTarget === undefined ) {
+
+			this.renderer.getSize( size );
+			this._pixelRatio = this.renderer.getPixelRatio();
+			this._width = size.width;
+			this._height = size.height;
+
+			renderTarget = this.renderTarget1.clone();
+			renderTarget.setSize( this._width * this._pixelRatio, this._height * this._pixelRatio );
+
+		}
+
+		this.renderTarget1.dispose();
+		this.renderTarget2.dispose();
+		this.renderTarget1 = renderTarget;
+		this.renderTarget2 = renderTarget.clone();
+
+		this.writeBuffer = this.renderTarget1;
+		this.readBuffer = this.renderTarget2;
+
+	}
+
+	setSize( width, height ) {
+
+		this._width = width;
+		this._height = height;
+
+		const effectiveWidth = this._width * this._pixelRatio;
+		const effectiveHeight = this._height * this._pixelRatio;
+
+		this.renderTarget1.setSize( effectiveWidth, effectiveHeight );
+		this.renderTarget2.setSize( effectiveWidth, effectiveHeight );
+
+		for ( let i = 0; i < this.passes.length; i ++ ) {
+
+			this.passes[ i ].setSize( effectiveWidth, effectiveHeight );
+
+		}
+
+	}
+
+	setPixelRatio( pixelRatio ) {
+
+		this._pixelRatio = pixelRatio;
+
+		this.setSize( this._width, this._height );
+
+	}
+
+	dispose() {
+
+		this.renderTarget1.dispose();
+		this.renderTarget2.dispose();
+
+		this.copyPass.dispose();
+
+		this.renderer.xr.removeEventListener( 'sessionstart', this.onSessionStateChange );
+		this.renderer.xr.removeEventListener( 'sessionend', this.onSessionStateChange );
+
+	}
+
 }
-
 //////////////////////////////
 // Render Pass 			        //
 //////////////////////////////
 const Color = THREE.Color;
 class RenderPass extends Pass {
-  constructor(scene, camera, overrideMaterial, clearColor, clearAlpha) {
-    super();
 
-    this.scene = scene;
-    this.camera = camera;
+	constructor( scene, camera, overrideMaterial, clearColor, clearAlpha ) {
 
-    this.overrideMaterial = overrideMaterial;
+		super();
 
-    this.clearColor = clearColor;
-    this.clearAlpha = clearAlpha !== undefined ? clearAlpha : 0;
+		this.scene = scene;
+		this.camera = camera;
 
-    this.clear = true;
-    this.clearDepth = false;
-    this.needsSwap = false;
-    this._oldClearColor = new Color();
-  }
+		this.overrideMaterial = overrideMaterial;
 
-  render(renderer, writeBuffer, readBuffer /*, deltaTime, maskActive */) {
-    const oldAutoClear = renderer.autoClear;
-    renderer.autoClear = false;
+		this.clearColor = clearColor;
+		this.clearAlpha = ( clearAlpha !== undefined ) ? clearAlpha : 0;
 
-    let oldClearAlpha, oldOverrideMaterial;
+		this.clear = true;
+		this.clearDepth = false;
+		this.needsSwap = false;
+		this._oldClearColor = new Color();
 
-    if (this.overrideMaterial !== undefined) {
-      oldOverrideMaterial = this.scene.overrideMaterial;
+	}
 
-      this.scene.overrideMaterial = this.overrideMaterial;
-    }
+	render( renderer, writeBuffer, readBuffer /*, deltaTime, maskActive */ ) {
 
-    if (this.clearColor) {
-      renderer.getClearColor(this._oldClearColor);
-      oldClearAlpha = renderer.getClearAlpha();
+		const oldAutoClear = renderer.autoClear;
+		renderer.autoClear = false;
 
-      renderer.setClearColor(this.clearColor, this.clearAlpha);
-    }
+		let oldClearAlpha, oldOverrideMaterial;
 
-    if (this.clearDepth) {
-      renderer.clearDepth();
-    }
+		if ( this.overrideMaterial !== undefined ) {
 
-    renderer.setRenderTarget(this.renderToScreen ? null : readBuffer);
+			oldOverrideMaterial = this.scene.overrideMaterial;
 
-    // TODO: Avoid using autoClear properties, see https://github.com/mrdoob/three.js/pull/15571#issuecomment-465669600
-    if (this.clear)
-      renderer.clear(
-        renderer.autoClearColor,
-        renderer.autoClearDepth,
-        renderer.autoClearStencil
-      );
-    renderer.render(this.scene, this.camera);
+			this.scene.overrideMaterial = this.overrideMaterial;
 
-    if (this.clearColor) {
-      renderer.setClearColor(this._oldClearColor, oldClearAlpha);
-    }
+		}
 
-    if (this.overrideMaterial !== undefined) {
-      this.scene.overrideMaterial = oldOverrideMaterial;
-    }
+		if ( this.clearColor ) {
 
-    renderer.autoClear = oldAutoClear;
-  }
+			renderer.getClearColor( this._oldClearColor );
+			oldClearAlpha = renderer.getClearAlpha();
+
+			renderer.setClearColor( this.clearColor, this.clearAlpha );
+
+		}
+
+		if ( this.clearDepth ) {
+
+			renderer.clearDepth();
+
+		}
+
+		renderer.setRenderTarget( this.renderToScreen ? null : readBuffer );
+
+		// TODO: Avoid using autoClear properties, see https://github.com/mrdoob/three.js/pull/15571#issuecomment-465669600
+		if ( this.clear ) renderer.clear( renderer.autoClearColor, renderer.autoClearDepth, renderer.autoClearStencil );
+		renderer.render( this.scene, this.camera );
+
+		if ( this.clearColor ) {
+
+			renderer.setClearColor( this._oldClearColor, oldClearAlpha );
+
+		}
+
+		if ( this.overrideMaterial !== undefined ) {
+
+			this.scene.overrideMaterial = oldOverrideMaterial;
+
+		}
+
+		renderer.autoClear = oldAutoClear;
+
+	}
+
 }
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
@@ -750,9 +831,10 @@ class PencilLinesPass extends Pass {
     renderer.setRenderTarget(this.normalBuffer);
     const overrideMaterialValue = this.scene.overrideMaterial;
 
-    this.scene.overrideMaterial = this.normalMaterial;
-    renderer.render(this.scene, this.camera);
-    this.scene.overrideMaterial = overrideMaterialValue;
+    // Uncomment this if necessary
+    // this.scene.overrideMaterial = this.normalMaterial;
+    // renderer.render(this.scene, this.camera);
+    // this.scene.overrideMaterial = overrideMaterialValue;
 
     this.material.uniforms.uNormals.value = this.normalBuffer.texture;
     this.material.uniforms.tDiffuse.value = readBuffer.texture;
@@ -760,7 +842,8 @@ class PencilLinesPass extends Pass {
     if (this.renderToScreen) {
       renderer.setRenderTarget(null);
       this.fsQuad.render(renderer);
-    } else {
+    } 
+    else {
       renderer.setRenderTarget(writeBuffer);
       if (this.clear) renderer.clear();
       this.fsQuad.render(renderer);
@@ -1547,37 +1630,42 @@ class RenderPixelatedPass extends Pass {
  */
 
 const GammaCorrectionShader = {
-  name: "GammaCorrectionShader",
 
-  uniforms: {
-    tDiffuse: { value: null },
-  },
+	name: 'GammaCorrectionShader',
 
-  vertexShader: /* glsl */ `
-  
-          varying vec2 vUv;
-  
-          void main() {
-  
-              vUv = uv;
-              gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
-  
-          }`,
+	uniforms: {
 
-  fragmentShader: /* glsl */ `
-  
-          uniform sampler2D tDiffuse;
-  
-          varying vec2 vUv;
-  
-          void main() {
-  
-              vec4 tex = texture2D( tDiffuse, vUv );
-  
-              gl_FragColor = LinearTosRGB( tex );
-  
-          }`,
+		'tDiffuse': { value: null }
+
+	},
+
+	vertexShader: /* glsl */`
+
+		varying vec2 vUv;
+
+		void main() {
+
+			vUv = uv;
+			gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+
+		}`,
+
+	fragmentShader: /* glsl */`
+
+		uniform sampler2D tDiffuse;
+
+		varying vec2 vUv;
+
+		void main() {
+
+			vec4 tex = texture2D( tDiffuse, vUv );
+
+			gl_FragColor = LinearTosRGB( tex );
+
+		}`
+
 };
+
 
 //////////////////////////////
 // 5. GLITCH EFFECT   			//
@@ -2503,44 +2591,47 @@ class OutputPass extends Pass {
  * angle: shift angle in radians
  */
 const RGBShiftShader = {
-  name: "RGBShiftShader",
 
-  uniforms: {
-    tDiffuse: { value: null },
-    amount: { value: 0.005 },
-    angle: { value: 0.0 },
-  },
+	name: 'RGBShiftShader',
 
-  vertexShader: /* glsl */ `
-  
-          varying vec2 vUv;
-  
-          void main() {
-  
-              vUv = uv;
-              gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
-  
-          }`,
+	uniforms: {
 
-  fragmentShader: /* glsl */ `
-  
-          uniform sampler2D tDiffuse;
-          uniform float amount;
-          uniform float angle;
-  
-          varying vec2 vUv;
-  
-          void main() {
-  
-              vec2 offset = amount * vec2( cos(angle), sin(angle));
-              vec4 cr = texture2D(tDiffuse, vUv + offset);
-              vec4 cga = texture2D(tDiffuse, vUv);
-              vec4 cb = texture2D(tDiffuse, vUv - offset);
-              gl_FragColor = vec4(cr.r, cga.g, cb.b, cga.a);
-  
-          }`,
+		'tDiffuse': { value: null },
+		'amount': { value: 0.005 },
+		'angle': { value: 0.0 }
+
+	},
+
+	vertexShader: /* glsl */`
+
+		varying vec2 vUv;
+
+		void main() {
+
+			vUv = uv;
+			gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+
+		}`,
+
+	fragmentShader: /* glsl */`
+
+		uniform sampler2D tDiffuse;
+		uniform float amount;
+		uniform float angle;
+
+		varying vec2 vUv;
+
+		void main() {
+
+			vec2 offset = amount * vec2( cos(angle), sin(angle));
+			vec4 cr = texture2D(tDiffuse, vUv + offset);
+			vec4 cga = texture2D(tDiffuse, vUv);
+			vec4 cb = texture2D(tDiffuse, vUv - offset);
+			gl_FragColor = vec4(cr.r, cga.g, cb.b, cga.a);
+
+		}`
+
 };
-
 // Dot Screen Shader
 /**
  * Dot screen shader
@@ -2549,58 +2640,62 @@ const RGBShiftShader = {
  */
 
 const DotScreenShader = {
-  name: "DotScreenShader",
 
-  uniforms: {
-    tDiffuse: { value: null },
-    tSize: { value: new Vector2(256, 256) },
-    center: { value: new Vector2(0.5, 0.5) },
-    angle: { value: 1.57 },
-    scale: { value: 1.0 },
-  },
+	name: 'DotScreenShader',
 
-  vertexShader: /* glsl */ `
-  
-          varying vec2 vUv;
-  
-          void main() {
-  
-              vUv = uv;
-              gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
-  
-          }`,
+	uniforms: {
 
-  fragmentShader: /* glsl */ `
-  
-          uniform vec2 center;
-          uniform float angle;
-          uniform float scale;
-          uniform vec2 tSize;
-  
-          uniform sampler2D tDiffuse;
-  
-          varying vec2 vUv;
-  
-          float pattern() {
-  
-              float s = sin( angle ), c = cos( angle );
-  
-              vec2 tex = vUv * tSize - center;
-              vec2 point = vec2( c * tex.x - s * tex.y, s * tex.x + c * tex.y ) * scale;
-  
-              return ( sin( point.x ) * sin( point.y ) ) * 4.0;
-  
-          }
-  
-          void main() {
-  
-              vec4 color = texture2D( tDiffuse, vUv );
-  
-              float average = ( color.r + color.g + color.b ) / 3.0;
-  
-              gl_FragColor = vec4( vec3( average * 10.0 - 5.0 + pattern() ), color.a );
-  
-          }`,
+		'tDiffuse': { value: null },
+		'tSize': { value: new Vector2( 256, 256 ) },
+		'center': { value: new Vector2( 0.5, 0.5 ) },
+		'angle': { value: 1.57 },
+		'scale': { value: 1.0 }
+
+	},
+
+	vertexShader: /* glsl */`
+
+		varying vec2 vUv;
+
+		void main() {
+
+			vUv = uv;
+			gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+
+		}`,
+
+	fragmentShader: /* glsl */`
+
+		uniform vec2 center;
+		uniform float angle;
+		uniform float scale;
+		uniform vec2 tSize;
+
+		uniform sampler2D tDiffuse;
+
+		varying vec2 vUv;
+
+		float pattern() {
+
+			float s = sin( angle ), c = cos( angle );
+
+			vec2 tex = vUv * tSize - center;
+			vec2 point = vec2( c * tex.x - s * tex.y, s * tex.x + c * tex.y ) * scale;
+
+			return ( sin( point.x ) * sin( point.y ) ) * 4.0;
+
+		}
+
+		void main() {
+
+			vec4 color = texture2D( tDiffuse, vUv );
+
+			float average = ( color.r + color.g + color.b ) / 3.0;
+
+			gl_FragColor = vec4( vec3( average * 10.0 - 5.0 + pattern() ), color.a );
+
+		}`
+
 };
 
 //////////////////////////////
@@ -3206,6 +3301,7 @@ AFRAME.registerComponent("post-processing", {
         scene: this.scene,
         camera: this.camera,
       });
+      pencilLinePass.renderToScreen = false;
       this.composer.addPass(pencilLinePass);
     } else if (this.data.effect === "halftone") {
       this.composer = new EffectComposer(this.renderer);
@@ -3423,27 +3519,27 @@ AFRAME.registerComponent("post-processing", {
 
     this.bind();
   },
-  // tick: function (t, dt) {
-  //   this.t = t;
-  //   this.dt = dt;
-  // },
-  // bind: function () {
-  //   const render = this.renderer.render;
-  //   const system = this;
-  //   let isDigest = false;
+  tick: function (t, dt) {
+    this.t = t;
+    this.dt = dt;
+  },
+  bind: function () {
+    const render = this.renderer.render;
+    const system = this;
+    let isDigest = false;
 
-  //   this.renderer.render = function () {
-  //     if (isDigest) {
-  //       render.apply(this, arguments);
-  //     } else {
-  //       isDigest = true;
-  //       if (system.occlusionComposer) {
-  //         system.occlusionComposer.render(system.dt);
-  //       } else {
-  //         system.composer.render(system.dt);
-  //       }
-  //       isDigest = false;
-  //     }
-  //   };
-  // },
+    this.renderer.render = function () {
+      if (isDigest) {
+        render.apply(this, arguments);
+      } else {
+        isDigest = true;
+        if (system.occlusionComposer) {
+          system.occlusionComposer.render(system.dt);
+        } else {
+          system.composer.render(system.dt);
+        }
+        isDigest = false;
+      }
+    };
+  },
 });
