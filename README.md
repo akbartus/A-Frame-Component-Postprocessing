@@ -66,7 +66,9 @@ The project is powered by AFrame and Three.js. The effects and corresponding exa
 * Volumetric light (God-rays) - https://github.com/abberg/three-volumetric-light.
 * Bad TV - https://github.com/felixturner/bad-tv-shader.
 
-Updated version of A-Frame (1.4.2) is used, which takes into account webXR. The updates to A-Frame were made based on CodyJasonBennet's updates to Three.js and taken from <a href="https://github.com/mrdoob/three.js/pull/26160">here</a> with indivudual changes made to <a href="https://github.com/CodyJasonBennett/three.js/commit/9719d00d36467508b4e36b8097908648e1f368b3">three.js</a> files. 
+Updated version of A-Frame (1.4.2) is used, which takes into account webXR. The updates to A-Frame and respective passes/shaders were made based on CodyJasonBennet's suggested changes to Three.js and taken from <a href="https://github.com/mrdoob/three.js/pull/26160">here</a> with indivudual changes made to <a href="https://github.com/CodyJasonBennett/three.js/commit/9719d00d36467508b4e36b8097908648e1f368b3">three.js</a> files. 
+
+A small hack allowing the support of Three.js based post-processing in A-Frame, was taken from the following <a href="https://stackoverflow.com/questions/68991451/is-there-a-way-to-implement-the-three-js-effect-composer-into-aframe-with-vr-mod">source</a>.  
 
 The following shaders and passes were integrated into component and can be accessed when creating custom effects:
 * Copy Shader, Pencil Lines Material Shader, Halftone Shader, Film grain & scanlines shader, Vignette Shader, Gamma Correction Shader, Digital Glitch Shader, Luminosity Shader, Sobel Operator Shader, Luminosity High Pass Shader, Output Shader, RGB Shift Shader, Dot Screen Shader, VolumetericLightShader, Afterimage shader, BadTVShader, Static Shader.
